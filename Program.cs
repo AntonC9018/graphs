@@ -155,7 +155,16 @@ namespace Graph
                     new int [] { 4, 2 }
                 }
             );
-            Algorithm.Malgrange.Run(graph);
+            var maxStableSets = Algorithm.Malgrange.Run(graph);
+
+            foreach (var set in maxStableSets)
+            {
+                foreach (var i in set)
+                {
+                    System.Console.Write($"{i}, ");
+                }
+                System.Console.WriteLine();
+            }
         }
     }
 }

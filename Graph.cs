@@ -5,12 +5,10 @@ namespace Graph
 {
     public class Node
     {
-        public int index;
         public int[] connections;
 
-        public Node(int index, int[] connections)
+        public Node(int[] connections)
         {
-            this.index = index;
             this.connections = connections;
         }
     }
@@ -29,7 +27,7 @@ namespace Graph
             m_nodes = new Node[nodeList.Length];
             for (int i = 0; i < nodeList.Length; i++)
             {
-                m_nodes[i] = new Node(i, nodeList[i]);
+                m_nodes[i] = new Node(nodeList[i]);
             }
         }
 

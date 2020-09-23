@@ -3,12 +3,6 @@ using Graph;
 
 namespace Algorithm
 {
-    public class IterationResult
-    {
-        public HashSet<SubMatrix> nextCoverage;
-        public HashSet<SubMatrix> combinations;
-    }
-
     public static class Malgrange
     {
         public static HashSet<HashSet<int>> Run(Graph.Graph graph)
