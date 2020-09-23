@@ -33,6 +33,8 @@ namespace Algorithm
 
             this.usedVertices = new HashSet<int>(numVertices);
             this.numVertices = graph.Nodes.Length;
+
+            // step 1
             this.blocks = InitializeBlocks(graph);
         }
 
@@ -81,7 +83,7 @@ namespace Algorithm
 
                 UndoLastMerge();
                 selectedBlock?.RefillUnused();
-                return Iterate();
+                return Iterate(); // step 2 (iterate again)
             }
 
             if (currentOptimalSolution.Count == 0
@@ -92,13 +94,12 @@ namespace Algorithm
                 AddPotentialSolution(nextVertexIndex, nextColumnIndex, nextColumn);
 
                 if (usedVertices.Count < numVertices)
-                    // step 2 (iterate again)
-                    return Iterate();
+                    return Iterate(); // step 2 (iterate again)
 
                 MarkPotentialSolutionAsCurrentOptimal();
             }
+            // step 6
             UndoLastMerge();
-
             return Iterate();
         }
 
