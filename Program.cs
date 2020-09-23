@@ -1,5 +1,4 @@
 ﻿// Run with `dotnet run`
-
 using System;
 
 namespace Graph

@@ -1,9 +1,8 @@
-using System;
 using System.Text;
 
 namespace Graph
 {
-    public class Int2dMatrix
+    public class IntMatrix
     {
         protected int[,] m_numbers;
 
@@ -16,28 +15,28 @@ namespace Graph
         public int Width => m_numbers.GetLength(1);
         public int Height => m_numbers.GetLength(0);
 
-        public Int2dMatrix(int height, int width)
+        public IntMatrix(int height, int width)
         {
             m_numbers = new int[height, width];
         }
 
-        public Int2dMatrix(int[,] numbers)
+        public IntMatrix(int[,] numbers)
         {
             m_numbers = numbers;
         }
 
-        public Int2dMatrix(Int2dMatrix matrix)
+        public IntMatrix(IntMatrix matrix)
         {
             m_numbers = (int[,])matrix.m_numbers.Clone();
         }
 
-        public Int2dMatrix Mult(Int2dMatrix mat)
+        public IntMatrix Mult(IntMatrix mat)
         {
             if (Width != mat.Height)
             {
                 throw new System.Exception("The width doesn't match the height of the matrix multiplying into");
             }
-            var result = new Int2dMatrix(Height, mat.Width);
+            var result = new IntMatrix(Height, mat.Width);
 
             for (int i = 0; i < Height; i++)
             {
@@ -52,11 +51,11 @@ namespace Graph
             return result;
         }
 
-        public Int2dMatrix Transpose
+        public IntMatrix Transpose
         {
             get
             {
-                var result = new Int2dMatrix(Width, Height);
+                var result = new IntMatrix(Width, Height);
 
                 for (int i = 0; i < Height; i++)
                 {
@@ -83,9 +82,9 @@ namespace Graph
             return sb.ToString();
         }
 
-        public static Int2dMatrix operator -(Int2dMatrix matrix)
+        public static IntMatrix operator -(IntMatrix matrix)
         {
-            var result = new Int2dMatrix(matrix.Height, matrix.Width);
+            var result = new IntMatrix(matrix.Height, matrix.Width);
             for (int i = 0; i < matrix.Height; i++)
             {
                 for (int j = 0; j < matrix.Width; j++)
@@ -94,9 +93,9 @@ namespace Graph
             return result;
         }
 
-        public Int2dMatrix Fill(int value)
+        public IntMatrix Fill(int value)
         {
-            Int2dMatrix result = new Int2dMatrix(Height, Width);
+            IntMatrix result = new IntMatrix(Height, Width);
             for (int i = 0; i < Height; i++)
             {
                 for (int j = 0; j < Width; j++)
@@ -105,13 +104,13 @@ namespace Graph
             return result;
         }
 
-        public static Int2dMatrix operator -(Int2dMatrix lhs, Int2dMatrix rhs)
+        public static IntMatrix operator -(IntMatrix lhs, IntMatrix rhs)
         {
             if (lhs.Width != rhs.Width || lhs.Height != rhs.Height)
             {
                 throw new System.Exception("Dimensions didn't match, couldn't subtract the two matrices");
             }
-            var result = new Int2dMatrix(lhs.Height, lhs.Width);
+            var result = new IntMatrix(lhs.Height, lhs.Width);
             for (int i = 0; i < lhs.Height; i++)
             {
                 for (int j = 0; j < lhs.Width; j++)

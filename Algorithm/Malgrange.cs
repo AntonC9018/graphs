@@ -30,7 +30,7 @@ namespace Algorithm
             return result;
         }
 
-        private static HashSet<SubMatrix> IntializeCoverage(Int2dMatrix invertedAdjacency)
+        private static HashSet<SubMatrix> IntializeCoverage(IntMatrix invertedAdjacency)
         {
             var coverage = new HashSet<SubMatrix>();
             for (int i = 0; i < invertedAdjacency.Height; i++)

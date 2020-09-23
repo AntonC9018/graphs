@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.IO;
 
 namespace Graph
 {
@@ -31,9 +30,9 @@ namespace Graph
             }
         }
 
-        public Int2dMatrix CreateAdjacencyMatrix()
+        public IntMatrix CreateAdjacencyMatrix()
         {
-            var result = new Int2dMatrix(m_nodes.Length, m_nodes.Length);
+            var result = new IntMatrix(m_nodes.Length, m_nodes.Length);
             for (int i = 0; i < m_nodes.Length; i++)
             {
                 foreach (int j in m_nodes[i].connections)
@@ -42,7 +41,7 @@ namespace Graph
             return result;
         }
 
-        public Int2dMatrix CreateUndirectedIncidenceMatrix()
+        public IntMatrix CreateUndirectedIncidenceMatrix()
         {
             // for first we need to know how many edges there are in the graph
             // somehow label the edges
@@ -63,7 +62,7 @@ namespace Graph
             // now construct the matrix where:
             // height = # of verteces
             // width = # of edges
-            Int2dMatrix result = new Int2dMatrix(m_nodes.Length, edgeCount);
+            IntMatrix result = new IntMatrix(m_nodes.Length, edgeCount);
             foreach (var ((from, to), i) in edges)
             {
                 result[from, i] = 1;
@@ -75,7 +74,7 @@ namespace Graph
 
         // only works right for a directed simple graph, that is
         // there is at most one edge between any two vertices
-        public Int2dMatrix CreateDirectedIncidenceMatrix()
+        public IntMatrix CreateDirectedIncidenceMatrix()
         {
             // for first we need to know how many edges there are in the graph
             // somehow label the edges
@@ -93,7 +92,7 @@ namespace Graph
             // now construct the matrix where:
             // height = # of verteces
             // width = # of edges
-            Int2dMatrix result = new Int2dMatrix(m_nodes.Length, edgeCount);
+            IntMatrix result = new IntMatrix(m_nodes.Length, edgeCount);
             foreach (var ((from, to), i) in edges)
             {
                 result[from, i] = 1;
@@ -103,9 +102,9 @@ namespace Graph
             return result;
         }
 
-        public Int2dMatrix CreateKirchhoffMatrix()
+        public IntMatrix CreateKirchhoffMatrix()
         {
-            var result = new Int2dMatrix(m_nodes.Length, m_nodes.Length);
+            var result = new IntMatrix(m_nodes.Length, m_nodes.Length);
             for (int i = 0; i < m_nodes.Length; i++)
             {
                 foreach (int j in m_nodes[i].connections)
@@ -116,7 +115,7 @@ namespace Graph
             return result;
         }
 
-        public static Int2dMatrix ConvertKirchhoffToAdjacency(Int2dMatrix kirchhoff)
+        public static IntMatrix ConvertKirchhoffToAdjacency(IntMatrix kirchhoff)
         {
             var result = -kirchhoff;
             for (int i = 0; i < result.Height; i++)
@@ -141,7 +140,7 @@ namespace Graph
             Incidence -> Kirchhoff conversion function (that one always results 
             in a simmetric matrix).
         */
-        public static Int2dMatrix ConvertAdjacencyToKirchhoff(Int2dMatrix adjacency)
+        public static IntMatrix ConvertAdjacencyToKirchhoff(IntMatrix adjacency)
         {
             var result = -adjacency;
             for (int i = 0; i < adjacency.Height; i++)
@@ -152,9 +151,9 @@ namespace Graph
             return result;
         }
 
-        public static Int2dMatrix ConvertUndirectedIncidenceToAdjacency(Int2dMatrix incidence)
+        public static IntMatrix ConvertUndirectedIncidenceToAdjacency(IntMatrix incidence)
         {
-            var result = new Int2dMatrix(incidence.Height, incidence.Height);
+            var result = new IntMatrix(incidence.Height, incidence.Height);
             List<int> currentEdge = new List<int>(2);
 
             for (int j = 0; j < incidence.Width; j++)
@@ -171,9 +170,9 @@ namespace Graph
             return result;
         }
 
-        public static Int2dMatrix ConvertDirectedIncidenceToAdjacency(Int2dMatrix incidence)
+        public static IntMatrix ConvertDirectedIncidenceToAdjacency(IntMatrix incidence)
         {
-            var result = new Int2dMatrix(incidence.Height, incidence.Height);
+            var result = new IntMatrix(incidence.Height, incidence.Height);
 
             for (int i = 0; i < incidence.Width; i++)
             {
@@ -194,7 +193,7 @@ namespace Graph
         }
 
         // basically diplicate logic for the default list graph representation I used
-        public static Int2dMatrix ConvertAdjacencyToUndirectedIncidence(Int2dMatrix adjacency)
+        public static IntMatrix ConvertAdjacencyToUndirectedIncidence(IntMatrix adjacency)
         {
             // for first we need to know how many edges there are in the graph
             // somehow label the edges
@@ -215,7 +214,7 @@ namespace Graph
             // now construct the matrix where:
             // height = # of verteces
             // width = # of edges
-            Int2dMatrix result = new Int2dMatrix(adjacency.Height, edgeCount);
+            IntMatrix result = new IntMatrix(adjacency.Height, edgeCount);
             foreach (var ((from, to), i) in edges)
             {
                 result[from, i] = 1;
@@ -225,7 +224,7 @@ namespace Graph
             return result;
         }
 
-        public static Int2dMatrix ConvertAdjacencyToDirectedIncidence(Int2dMatrix adjacency)
+        public static IntMatrix ConvertAdjacencyToDirectedIncidence(IntMatrix adjacency)
         {
             // for first we need to know how many edges there are in the graph
             // somehow label the edges
@@ -244,7 +243,7 @@ namespace Graph
             // now construct the matrix where:
             // height = # of verteces
             // width = # of edges
-            Int2dMatrix result = new Int2dMatrix(adjacency.Height, edges.Count);
+            IntMatrix result = new IntMatrix(adjacency.Height, edges.Count);
             for (int i = 0; i < edges.Count; i++)
             {
                 var (from, to) = edges[i];
@@ -256,7 +255,7 @@ namespace Graph
         }
 
         // K = M_t * M
-        public static Int2dMatrix ConvertDirectedIncidenceToKirchhoff(Int2dMatrix incidence)
+        public static IntMatrix ConvertDirectedIncidenceToKirchhoff(IntMatrix incidence)
         {
             return incidence.Mult(incidence.Transpose);
         }
