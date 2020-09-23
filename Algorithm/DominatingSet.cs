@@ -66,12 +66,8 @@ namespace Algorithm
             return blocks;
         }
 
-        int count = 0;
-
         private HashSet<(int, int)> Iterate()
         {
-            if (count++ > 5) return null;
-
             // step 2
             int nextVertexIndex = GetMinNotInSet(usedVertices, blocks.Count); // p
 
@@ -84,7 +80,6 @@ namespace Algorithm
                     return currentOptimalSolution;
 
                 UndoLastMerge();
-                System.Console.WriteLine("Refilling");
                 selectedBlock?.RefillUnused();
                 return Iterate();
             }
