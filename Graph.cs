@@ -16,6 +16,8 @@ namespace Graph
     {
         private Node[] m_nodes;
 
+        public Node[] Nodes => m_nodes;
+
         public Graph(Node[] nodeList)
         {
             m_nodes = nodeList;

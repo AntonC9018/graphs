@@ -11,7 +11,8 @@ namespace Graph
             // DirectedDemo();
             // UndirectedTraversalDemo();
             // DirectedTraversalDemo();
-            MalgrangeDemo();
+            // MalgrangeDemo();
+            DominatingSetsDemo();
         }
 
         static void UndirectedDemo()
@@ -164,6 +165,25 @@ namespace Graph
                 }
                 System.Console.WriteLine();
             }
+        }
+
+        static void DominatingSetsDemo()
+        {
+            // 2 — 1 — 3
+            // |
+            // 0 — 4
+            var graph = new Graph(
+                new int[][]
+                {
+                    new int [] { 2, 4 },
+                    new int [] { 2, 3 },
+                    new int [] { 0, 1 },
+                    new int [] { 1 },
+                    new int [] { 0 },
+                }
+            );
+
+            var result = Algorithm.DominatingSets.Run(graph);
         }
     }
 }
