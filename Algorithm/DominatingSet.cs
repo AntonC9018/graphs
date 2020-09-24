@@ -29,7 +29,7 @@ namespace Algorithm
         }
 
         private Stack<HashSet<int>> prevAddedVertices; // T
-        private Stack<Solution> prevAddedPotentialSolution; // S_p_j (vertex index, column index)
+        private Stack<Solution> prevAddedPotentialSolution; // S_p_j
         private HashSet<Solution> currentOptimalSolution; // B_star
         private HashSet<Solution> potentialOptimalSolution; // B
         private HashSet<int> usedVertices; // E
@@ -118,7 +118,6 @@ namespace Algorithm
             var solution = new Solution(vertexIndex, columnIndex);
             prevAddedPotentialSolution.Push(solution);
 
-            // prevAddedVertices.Clear();
             var verticesCopy = new HashSet<int>(vertices);
             verticesCopy.ExceptWith(usedVertices);
             prevAddedVertices.Push(verticesCopy);
@@ -140,14 +139,7 @@ namespace Algorithm
         {
             currentOptimalSolution.Clear();
             currentOptimalSolution.UnionWith(potentialOptimalSolution);
-            // potentialOptimalSolution = new HashSet<(int, int)>();
         }
-
-        // private void Reset()
-        // {
-        //     potentialOptimalSolution.Clear();
-        //     usedVertices.Clear();
-        // }
 
         private int GetMinNotInSet(HashSet<int> set, int valueLimit)
         {
