@@ -9,10 +9,15 @@ namespace Algorithm
 
     public class DominatingSets
     {
-        public static HashSet<(int, int)> Run(Graph.Graph graph)
+        public static IEnumerable<int> Run(Graph.Graph graph)
         {
             var algo = new DominatingSets(graph);
-            return algo.Iterate();
+            var result = algo.Iterate();
+            // keep the vertex indices only
+            foreach (var (vertexIndex, _) in result)
+            {
+                yield return vertexIndex;
+            }
         }
 
         private Stack<HashSet<int>> prevAddedVertices; // T

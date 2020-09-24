@@ -184,9 +184,9 @@ namespace Graph
             );
 
             var result = Algorithm.DominatingSets.Run(graph);
-            foreach (var set in result)
+            foreach (var vertexIndex in result)
             {
-                System.Console.WriteLine(set);
+                System.Console.WriteLine(vertexIndex);
             }
         }
     }
