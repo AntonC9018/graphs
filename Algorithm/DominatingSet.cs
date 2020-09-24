@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Graph;
 
 namespace Algorithm
@@ -14,8 +15,8 @@ namespace Algorithm
             return algo.Iterate();
         }
 
-        private HashSet<int> prevAddedVertices; // T
-        private (int, int) prevAddedPotentialSolution; // S_p_j (vertex index, column index)
+        private Stack<HashSet<int>> prevAddedVertices; // T
+        private Stack<(int, int)> prevAddedPotentialSolution; // S_p_j (vertex index, column index)
         private HashSet<(int, int)> currentOptimalSolution; // B_star
         private HashSet<(int, int)> potentialOptimalSolution; // B
         private HashSet<int> usedVertices; // E
@@ -25,8 +26,8 @@ namespace Algorithm
 
         private DominatingSets(Graph.Graph graph)
         {
-            this.prevAddedVertices = new HashSet<int>();
-            this.prevAddedPotentialSolution = (0, 0);
+            this.prevAddedVertices = new Stack<HashSet<int>>();
+            this.prevAddedPotentialSolution = new Stack<(int, int)>();
 
             this.currentOptimalSolution = new HashSet<(int, int)>();
             this.potentialOptimalSolution = new HashSet<(int, int)>();
@@ -45,22 +46,18 @@ namespace Algorithm
             for (int i = 0; i < graph.Nodes.Length; i++)
             {
                 var column = new HashSet<int>(graph.Nodes[i].connections.Length);
-                int indexOfBlockToAppendTo = i;
-                bool isIndexNotOverwritten() => indexOfBlockToAppendTo == i;
+
+                int min = graph.Nodes[i].connections.Min();
+                int indexOfBlockToAppendTo = min < i ? min : i;
 
                 column.Add(i);
 
                 foreach (int connection in graph.Nodes[i].connections)
-                {
-                    if (isIndexNotOverwritten() && blocks.ContainsKey(connection))
-                        indexOfBlockToAppendTo = connection;
-
                     column.Add(connection);
-                }
 
-                if (isIndexNotOverwritten())
+                if (!blocks.ContainsKey(indexOfBlockToAppendTo))
                 {
-                    blocks[i] = new Block();
+                    blocks[indexOfBlockToAppendTo] = new Block();
                 }
 
                 blocks[indexOfBlockToAppendTo].AppendColumn(column);
@@ -105,23 +102,24 @@ namespace Algorithm
 
         private void AddPotentialSolution(int vertexIndex, int columnIndex, HashSet<int> vertices)
         {
-            prevAddedPotentialSolution = (vertexIndex, columnIndex);
+            var solution = (vertexIndex, columnIndex);
+            prevAddedPotentialSolution.Push(solution);
 
-            prevAddedVertices.Clear();
-            prevAddedVertices.UnionWith(vertices);
-            prevAddedVertices.ExceptWith(usedVertices);
+            // prevAddedVertices.Clear();
+            var verticesCopy = new HashSet<int>(vertices);
+            verticesCopy.ExceptWith(usedVertices);
+            prevAddedVertices.Push(verticesCopy);
 
-            potentialOptimalSolution.Add(prevAddedPotentialSolution);
-            usedVertices.UnionWith(prevAddedVertices);
+            potentialOptimalSolution.Add(solution);
+            usedVertices.UnionWith(verticesCopy);
         }
 
         private void UndoLastMerge()
         {
-            if (prevAddedVertices != null)
+            if (prevAddedPotentialSolution.Count > 0)
             {
-                potentialOptimalSolution.Remove(prevAddedPotentialSolution);
-                usedVertices.ExceptWith(prevAddedVertices);
-                prevAddedVertices.Clear();
+                potentialOptimalSolution.Remove(prevAddedPotentialSolution.Pop());
+                usedVertices.ExceptWith(prevAddedVertices.Pop());
             }
         }
 

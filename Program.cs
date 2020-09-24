@@ -184,6 +184,10 @@ namespace Graph
             );
 
             var result = Algorithm.DominatingSets.Run(graph);
+            foreach (var set in result)
+            {
+                System.Console.WriteLine(set);
+            }
         }
     }
 }
