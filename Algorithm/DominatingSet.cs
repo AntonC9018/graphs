@@ -29,7 +29,7 @@ namespace Algorithm
         }
 
         private Stack<HashSet<int>> prevAddedVertices; // T
-        private Stack<Solution> prevAddedPotentialSolution; // S_p_j
+        private Stack<Solution> prevAddedPotentialSolutions; // S_p_j
         private HashSet<Solution> currentOptimalSolution; // B_star
         private HashSet<Solution> potentialOptimalSolution; // B
         private HashSet<int> usedVertices; // E
@@ -40,7 +40,7 @@ namespace Algorithm
         private DominatingSets(Graph.Graph graph)
         {
             this.prevAddedVertices = new Stack<HashSet<int>>();
-            this.prevAddedPotentialSolution = new Stack<Solution>();
+            this.prevAddedPotentialSolutions = new Stack<Solution>();
 
             this.currentOptimalSolution = new HashSet<Solution>();
             this.potentialOptimalSolution = new HashSet<Solution>();
@@ -116,7 +116,7 @@ namespace Algorithm
         private void AddPotentialSolution(int vertexIndex, int columnIndex, HashSet<int> vertices)
         {
             var solution = new Solution(vertexIndex, columnIndex);
-            prevAddedPotentialSolution.Push(solution);
+            prevAddedPotentialSolutions.Push(solution);
 
             var verticesCopy = new HashSet<int>(vertices);
             verticesCopy.ExceptWith(usedVertices);
@@ -128,9 +128,9 @@ namespace Algorithm
 
         private void UndoLastMerge()
         {
-            if (prevAddedPotentialSolution.Count > 0)
+            if (prevAddedPotentialSolutions.Count > 0)
             {
-                potentialOptimalSolution.Remove(prevAddedPotentialSolution.Pop());
+                potentialOptimalSolution.Remove(prevAddedPotentialSolutions.Pop());
                 usedVertices.ExceptWith(prevAddedVertices.Pop());
             }
         }
