@@ -5,8 +5,6 @@ using Graph;
 
 namespace Algorithm
 {
-
-
     public class DominatingSets
     {
         public static IEnumerable<int> Run(Graph.Graph graph)
@@ -14,16 +12,26 @@ namespace Algorithm
             var algo = new DominatingSets(graph);
             var result = algo.Iterate();
             // keep the vertex indices only
-            foreach (var (vertexIndex, _) in result)
+            foreach (var solution in result)
             {
-                yield return vertexIndex;
+                yield return solution.vertexIndex;
+            }
+        }
+
+        private struct Solution
+        {
+            public int vertexIndex, columnIndex;
+            public Solution(int vertexIndex, int columnIndex)
+            {
+                this.vertexIndex = vertexIndex;
+                this.columnIndex = columnIndex;
             }
         }
 
         private Stack<HashSet<int>> prevAddedVertices; // T
-        private Stack<(int, int)> prevAddedPotentialSolution; // S_p_j (vertex index, column index)
-        private HashSet<(int, int)> currentOptimalSolution; // B_star
-        private HashSet<(int, int)> potentialOptimalSolution; // B
+        private Stack<Solution> prevAddedPotentialSolution; // S_p_j (vertex index, column index)
+        private HashSet<Solution> currentOptimalSolution; // B_star
+        private HashSet<Solution> potentialOptimalSolution; // B
         private HashSet<int> usedVertices; // E
         private Dictionary<int, Block> blocks;
 
@@ -32,10 +40,10 @@ namespace Algorithm
         private DominatingSets(Graph.Graph graph)
         {
             this.prevAddedVertices = new Stack<HashSet<int>>();
-            this.prevAddedPotentialSolution = new Stack<(int, int)>();
+            this.prevAddedPotentialSolution = new Stack<Solution>();
 
-            this.currentOptimalSolution = new HashSet<(int, int)>();
-            this.potentialOptimalSolution = new HashSet<(int, int)>();
+            this.currentOptimalSolution = new HashSet<Solution>();
+            this.potentialOptimalSolution = new HashSet<Solution>();
 
             this.usedVertices = new HashSet<int>(numVertices);
             this.numVertices = graph.Nodes.Length;
@@ -70,7 +78,7 @@ namespace Algorithm
             return blocks;
         }
 
-        private HashSet<(int, int)> Iterate()
+        private HashSet<Solution> Iterate()
         {
             // step 2
             int nextVertexIndex = GetMinNotInSet(usedVertices, blocks.Count); // p
@@ -107,7 +115,7 @@ namespace Algorithm
 
         private void AddPotentialSolution(int vertexIndex, int columnIndex, HashSet<int> vertices)
         {
-            var solution = (vertexIndex, columnIndex);
+            var solution = new Solution(vertexIndex, columnIndex);
             prevAddedPotentialSolution.Push(solution);
 
             // prevAddedVertices.Clear();
