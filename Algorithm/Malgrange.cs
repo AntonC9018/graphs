@@ -10,29 +10,29 @@ namespace Algorithm
             // Initial conditions
             var adjacency = graph.CreateAdjacencyMatrix();
             var invertedAdjacency = adjacency.Fill(1) - adjacency;
-            var coverage = IntializeCoverage(invertedAdjacency); // C
-            var subCoverage = new HashSet<SubMatrix>();          // X
+            var cover = IntializeCover(invertedAdjacency); // C
+            var subCover = new HashSet<SubMatrix>();          // X
 
             while (true)
             {
-                var nextCoverage = Iteration(coverage, subCoverage);
+                var nextCover = Iteration(cover, subCover);
 
-                if (nextCoverage.SetEquals(coverage))
+                if (nextCover.SetEquals(cover))
                     break;
 
-                coverage = nextCoverage;
-                subCoverage = CalculateSubCoverage(nextCoverage);
+                cover = nextCover;
+                subCover = CalculateSubCover(nextCover);
             }
 
-            var stableSets = ExtractStableSets(coverage);
+            var stableSets = ExtractStableSets(cover);
             var result = ExtractResult(stableSets);
 
             return result;
         }
 
-        private static HashSet<SubMatrix> IntializeCoverage(IntMatrix invertedAdjacency)
+        private static HashSet<SubMatrix> IntializeCover(IntMatrix invertedAdjacency)
         {
-            var coverage = new HashSet<SubMatrix>();
+            var cover = new HashSet<SubMatrix>();
             for (int i = 0; i < invertedAdjacency.Height; i++)
             {
                 var subMatrix = new SubMatrix();
@@ -46,49 +46,49 @@ namespace Algorithm
                 if (subMatrix.columnIndices.Count > 0)
                 {
                     subMatrix.rowIndices.Add(i);
-                    coverage.Add(subMatrix);
+                    cover.Add(subMatrix);
                 }
             }
-            return coverage;
+            return cover;
         }
 
-        private static HashSet<SubMatrix> Iteration(HashSet<SubMatrix> prevCoverage, HashSet<SubMatrix> subCoverage)
+        private static HashSet<SubMatrix> Iteration(HashSet<SubMatrix> prevCover, HashSet<SubMatrix> subCover)
         {
-            var withoutSubCoverage = new HashSet<SubMatrix>(prevCoverage);
-            withoutSubCoverage.ExceptWith(subCoverage);
-            var nextCoverage = new HashSet<SubMatrix>(withoutSubCoverage);
+            var withoutSubCover = new HashSet<SubMatrix>(prevCover);
+            withoutSubCover.ExceptWith(subCover);
+            var nextCover = new HashSet<SubMatrix>(withoutSubCover);
 
-            foreach (var subMatrixA in withoutSubCoverage)
+            foreach (var subMatrixA in withoutSubCover)
             {
-                foreach (var subMatrixB in withoutSubCoverage)
+                foreach (var subMatrixB in withoutSubCover)
                 {
                     var intersectionSubMatrix = subMatrixA.IntersectionStar(subMatrixB);
 
                     if (intersectionSubMatrix.Width != 0 && intersectionSubMatrix.Height != 0)
-                        nextCoverage.Add(intersectionSubMatrix);
+                        nextCover.Add(intersectionSubMatrix);
 
                     var unionSubMatrix = subMatrixA.UnionStar(subMatrixB);
 
                     if (unionSubMatrix.Width != 0 && unionSubMatrix.Height != 0)
-                        nextCoverage.Add(unionSubMatrix);
+                        nextCover.Add(unionSubMatrix);
                 }
             }
 
-            return nextCoverage;
+            return nextCover;
         }
 
-        private static HashSet<SubMatrix> CalculateSubCoverage(HashSet<SubMatrix> coverage)
+        private static HashSet<SubMatrix> CalculateSubCover(HashSet<SubMatrix> cover)
         {
-            var subCoverage = new HashSet<SubMatrix>();
-            foreach (var subMatrixA in coverage)
+            var subCover = new HashSet<SubMatrix>();
+            foreach (var subMatrixA in cover)
             {
-                foreach (var subMatrixB in coverage)
+                foreach (var subMatrixB in cover)
                 {
                     if (subMatrixA.IsProperSubMatrixOf(subMatrixB))
-                        subCoverage.Add(subMatrixA);
+                        subCover.Add(subMatrixA);
                 }
             }
-            return subCoverage;
+            return subCover;
         }
 
         private static HashSet<SubMatrix> ExtractStableSets(HashSet<SubMatrix> combinations)
