@@ -282,16 +282,19 @@ namespace Graph
 
                 if (marks[currentNodeIndex] == Mark.Not_Visited)
                 {
-                    System.Console.WriteLine($"Visiting node {currentNodeIndex}");
+                    // System.Console.WriteLine($"Visiting node {currentNodeIndex}");
+                    System.Console.Write($"{currentNodeIndex}, ");
                     marks[currentNodeIndex] = Mark.Visited;
 
                     var node = m_nodes[currentNodeIndex];
                     foreach (int index in node.connections)
+                    {
                         queue.Enqueue(index);
+                    }
                 }
                 else
                 {
-                    System.Console.WriteLine($"Skipping node {currentNodeIndex}");
+                    // System.Console.WriteLine($"Skipping node {currentNodeIndex}");
                 }
             }
         }

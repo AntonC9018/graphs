@@ -9,10 +9,10 @@ namespace Graph
         {
             // UndirectedDemo();
             // DirectedDemo();
-            // UndirectedTraversalDemo();
+            UndirectedTraversalDemo();
             // DirectedTraversalDemo();
             // MalgrangeDemo();
-            DominatingSetsDemo();
+            // DominatingSetsDemo();
         }
 
         static void UndirectedDemo()
@@ -20,7 +20,7 @@ namespace Graph
             var graph = new Graph(
                 new int[][]
                 {
-                    new int [] { 1, 2, 3 }, // 0 -> 1, 2
+                    new int [] { 1, 2, 3 }, // 0 -> 1, 2, 3
                     new int [] { 0, 2 },    // 1 -> 0, 2
                     new int [] { 0, 1, 3 }, // 2 -> 0, 1, 3
                     new int [] { 0, 2 }     // 3 -> 0, 2
@@ -92,10 +92,15 @@ namespace Graph
             var graph = new Graph(
                 new int[][]
                 {
-                    new int [] { 1, 2, 3 }, // 0 -> 1, 2
-                    new int [] { 0, 2 },    // 1 -> 0, 2
-                    new int [] { 0, 1, 3 }, // 2 -> 0, 1, 3
-                    new int [] { 0, 2 }     // 3 -> 0, 2
+                    // new int [] { 1 }, // 0 -> 1, 2, 3
+                    // new int [] { 0, 3 },    // 1 -> 0, 2
+                    // new int [] { 3 }, // 2 -> 0, 1, 3
+                    // new int [] { 1, 2 }     // 3 -> 0, 2
+                    new int[] { 1, 2, 3 },
+                    new int[] { 0, 4 },
+                    new int[] { 0 },
+                    new int[] { 0 },
+                    new int[] { 1 }
                 }
             );
 
@@ -113,7 +118,7 @@ namespace Graph
             var graph = new Graph(
                 new int[][]
                 {
-                    new int [] { 1, 2 },    // 0 -> 1
+                    new int [] { 1, 2 },    // 0 -> 1, 2
                     new int [] { 2 },       // 1 -> 2
                     new int [] { 3, 1 },    // 2 -> 3, 1
                     new int [] { 1, 2 }     // 3 -> 1, 2
@@ -155,6 +160,7 @@ namespace Graph
                     new int [] { 4, 2 }
                 }
             );
+            System.Console.WriteLine("Applying Malgrange");
             var maxStableSets = Algorithm.Malgrange.Run(graph);
 
             foreach (var set in maxStableSets)
@@ -182,12 +188,14 @@ namespace Graph
                     new int [] { 0 },
                 }
             );
+            System.Console.WriteLine("Looking for Dominating sets");
 
             var result = Algorithm.DominatingSets.Run(graph);
             foreach (var vertexIndex in result)
             {
-                System.Console.WriteLine(vertexIndex);
+                System.Console.Write($"{vertexIndex}, ");
             }
+            System.Console.WriteLine();
         }
     }
 }

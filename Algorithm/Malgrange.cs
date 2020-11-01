@@ -11,7 +11,7 @@ namespace Algorithm
             var adjacency = graph.CreateAdjacencyMatrix();
             var invertedAdjacency = adjacency.Fill(1) - adjacency;
             var cover = IntializeCover(invertedAdjacency); // C
-            var subCover = new HashSet<SubMatrix>();          // X
+            var subCover = new HashSet<SubMatrix>();       // X
 
             while (true)
             {
@@ -62,6 +62,10 @@ namespace Algorithm
             {
                 foreach (var subMatrixB in withoutSubCover)
                 {
+                    // if (subMatrixA.Equals(subMatrixB))
+                    // {
+                    //     continue;
+                    // }
                     var intersectionSubMatrix = subMatrixA.IntersectionStar(subMatrixB);
 
                     if (intersectionSubMatrix.Width != 0 && intersectionSubMatrix.Height != 0)
