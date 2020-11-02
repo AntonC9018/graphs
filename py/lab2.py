@@ -9,9 +9,11 @@ def demo():
     # (edges, vertices) = parse_weighted(graph_str)
     # print(kruskal(edges, vertices))
 
-    # unweighted_graph_str = "(0,1) (1,3) (0,2) (2,3)"
-    # (edges, vertices) = parse_unweighted(unweighted_graph_str)
-    # print(vertex_coloring(vertices))
+    unweighted_graph_str = "(0,1) (1,2) (2,3) (2,4) (2,5)"
+    (edges, vertices) = parse_unweighted(unweighted_graph_str)
+    (edges_inverted, vertices_inverted) = invert_graph(edges, vertices)
+    print(edges_inverted, vertices_inverted)
+    print(vertex_coloring(vertices_inverted))
 
     # graph_str = "(1,0,1) (1,0,2) (1,2,3) (1,1,3) (-2,3,0)"
     # (edges, vertices) = parse_weighted_digraph(graph_str)
@@ -108,17 +110,23 @@ def vertex_coloring(vertices):
     return iteration(0, 1, lis)
 
 
-def invert_digraph(edges: list, vertices: list) -> (list, list):
+def are_neighbors(edge1, edge2):
+    return edge1[0] == edge2[0] or edge1[1] == edge2[0] or edge1[0] == edge2[1] or edge1[1] == edge2[1]
+
+
+def invert_graph(edges: list, vertices: list) -> (list, list):
     new_vertices = [[] for edge in edges]
-    for i in range(len(new_vertices)):
-        for edge in edges:
-            if edge[0] == i:
-                new_vertices[i].append(edge[1])
-    new_edges = []
+    for i in range(len(edges)):
+        for j in range(len(edges)):
+            if i != j:
+                if are_neighbors(edges[i], edges[j]):
+                    new_vertices[i].append(j)
+    new_edges = set()
     for u in range(len(new_vertices)):
         for v in new_vertices[u]:
-            new_edges.append((u, v))
-    return (new_edges, new_vertices)
+            if (v, u) not in new_edges:
+                new_edges.add((u, v))
+    return (list(new_edges), new_vertices)
 
 
 def bellman_ford(edges: list, vertices: list, source: int) -> (list, list):
@@ -138,3 +146,7 @@ def bellman_ford(edges: list, vertices: list, source: int) -> (list, list):
             raise Exception("The given graph contains a negative cycle")
 
     return (distance, predecessor)
+
+
+if __name__ == "__main__":
+    demo()
