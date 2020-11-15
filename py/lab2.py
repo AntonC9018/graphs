@@ -93,16 +93,17 @@ def vertex_coloring(vertices):
                             # recursion for the results
                             iteration(v, color_count, coloring_copy))
 
-                # all colors used, introduce a new one
-                if len(possible_results) == 0:
-                    coloring[v] = color_count
-                    color_count += 1
-                    (color_count, coloring) = iteration(
-                        v, color_count, coloring)
-                else:
-                    # take the coloring that used least amount of colors
-                    (color_count, coloring) = min(
-                        possible_results, key=lambda r: r[0])
+                # try to color the vertex in an extra color too
+                extra_coloring_copy = coloring.copy()
+                extra_coloring_copy[v] = color_count
+                extra_result = iteration(
+                    v, color_count + 1, extra_coloring_copy)
+                possible_results.append(extra_result)
+
+                # take the coloring that used least amount of colors
+                (color_count, coloring) = min(
+                    possible_results, key=lambda r: r[0])
+
         return (color_count, coloring)
 
     lis = [-1] * len(vertices)
