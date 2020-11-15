@@ -74,7 +74,7 @@ def kruskal(edges, vertices):
 
 def vertex_coloring(vertices):
 
-    def iteration(u: int, color_count: int, initial_coloring: list) -> (int, list):
+    def iterate(u: int, color_count: int, initial_coloring: list) -> (int, list):
         coloring = initial_coloring.copy()
         # for all neighbors
         for v in vertices[u]:
@@ -84,21 +84,20 @@ def vertex_coloring(vertices):
                 # colors of all neighbors
                 used_colors = set([coloring[v2]
                                    for v2 in vertices[v] if coloring[v2] != -1])
+
+                def attempt_coloring(color, color_count):
+                    coloring_copy = coloring.copy()
+                    coloring_copy[v] = color
+                    possible_results.append(
+                        iterate(v, color_count, coloring_copy))
+
                 # try every color up to color_count if it is unused
                 for color in range(color_count):
                     if color not in used_colors:
-                        coloring_copy = coloring.copy()
-                        coloring_copy[v] = color
-                        possible_results.append(
-                            # recursion for the results
-                            iteration(v, color_count, coloring_copy))
+                        attempt_coloring(color, color_count)
 
                 # try to color the vertex in an extra color too
-                extra_coloring_copy = coloring.copy()
-                extra_coloring_copy[v] = color_count
-                extra_result = iteration(
-                    v, color_count + 1, extra_coloring_copy)
-                possible_results.append(extra_result)
+                attempt_coloring(color_count, color_count + 1)
 
                 # take the coloring that used least amount of colors
                 (color_count, coloring) = min(
@@ -108,7 +107,7 @@ def vertex_coloring(vertices):
 
     lis = [-1] * len(vertices)
     lis[0] = 0
-    return iteration(0, 1, lis)
+    return iterate(0, 1, lis)
 
 
 def are_neighbors(edge1, edge2):
