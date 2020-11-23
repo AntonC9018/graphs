@@ -9,11 +9,13 @@ def demo():
     # (edges, vertices) = parse_weighted(graph_str)
     # print(kruskal(edges, vertices))
 
-    unweighted_graph_str = "(0,1) (1,2) (2,3) (2,4) (2,5)"
+    unweighted_graph_str = "(0,1) (7,8) (2,8) (5,6) (2,6) (6,7) (2,7) (1,2) (1,5) (2,5) (4,5) (1,3) (3,5) (3,4)"
+    # unweighted_graph_str = "(0,1) (1,2) (2,3) (2,4) (2,5)"
     (edges, vertices) = parse_unweighted(unweighted_graph_str)
-    (edges_inverted, vertices_inverted) = invert_graph(edges, vertices)
-    print(edges_inverted, vertices_inverted)
-    print(vertex_coloring(vertices_inverted))
+    # (edges_inverted, vertices_inverted) = invert_graph(edges, vertices)
+    # print(edges_inverted, vertices_inverted)
+    print(vertex_coloring(vertices))
+    # print(vertex_coloring(vertices_inverted))
 
     # graph_str = "(1,0,1) (1,0,2) (1,2,3) (1,1,3) (-2,3,0)"
     # (edges, vertices) = parse_weighted_digraph(graph_str)
